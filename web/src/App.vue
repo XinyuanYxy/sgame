@@ -1,30 +1,46 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div>bot name: {{ bot_name }}</div>
+  <div>bot rating: {{ bot_rating }}</div>
+  <router-view />
 </template>
 
+<script>
+import $ from "jquery";
+import { ref } from "vue";
+
+export default {
+  name: "app",
+  setup: () => {
+    let bot_name = ref("");
+    let bot_rating = ref("");
+
+    $.ajax({
+      url: "http://localhost:3000/pk/getbotinfo/",
+      type: "get",
+      success: (res) => {
+        bot_name.value = res.name;
+        bot_rating.value = res.rating;
+      },
+    });
+
+    return {
+      bot_name,
+      bot_rating,
+    };
+  },
+};
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+body {
+  background-image: url("@/assets/pic.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100%;
+  background-position: center;
 }
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+body,
+html {
+  height: 100%;
 }
 </style>
